@@ -27,6 +27,8 @@ def find_ranking(keyword, target_domain, max_results=300):
 
     for start in range(0, max_results, 10):
 
+        print(f"Checking {start + 1} to {start + 10}")
+
         params = {
             "engine": "google",
             "q": keyword,
@@ -48,8 +50,15 @@ def find_ranking(keyword, target_domain, max_results=300):
             for result in organic_results:
 
                 link = result.get("link", "")
+
+                if not link:
+                    continue
+
                 result_domain = normalize_domain(link)
 
+                print(position, result_domain)
+
+                # Better matching
                 if target_domain in result_domain:
                     return position
 
