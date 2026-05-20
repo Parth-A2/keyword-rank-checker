@@ -1,12 +1,12 @@
 from flask import Flask, request, render_template_string
-from serpapi import GoogleSearch
+from serpapi.google_search import GoogleSearch
 from urllib.parse import urlparse
 import os
 
 app = Flask(__name__)
 
 # Your SerpApi Key
-API_KEY = os.getenv("SERPAPI_KEY")
+API_KEY = "51d0be0f94fb75c28e3358a0e8160b3cc5538a95e3210d07e938d7a65a50c5a7"
 
 
 def normalize_domain(url):
@@ -41,6 +41,7 @@ def find_ranking(keyword, target_domain, max_results=300):
 
             search = GoogleSearch(params)
             results = search.get_dict()
+            print(results)
 
             organic_results = results.get("organic_results", [])
 
