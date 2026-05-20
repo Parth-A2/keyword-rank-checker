@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template_string
 from serpapi.google_search import GoogleSearch
 from urllib.parse import urlparse
-import os
 
 app = Flask(__name__)
 
@@ -23,9 +22,11 @@ def find_ranking(keyword, target_domain, max_results=300):
 
     target_domain = target_domain.lower().replace("www.", "")
 
+    position_counter = 0
+
     for start in range(0, max_results, 10):
 
-        print(f"Checking {start + 1} to {start + 10}")
+        print(f"Checking results {start + 1} to {start + 10}")
 
         params = {
             "engine": "google",
@@ -36,34 +37,30 @@ def find_ranking(keyword, target_domain, max_results=300):
         }
 
         try:
-
             search = GoogleSearch(params)
             results = search.get_dict()
 
-            print("API RESPONSE:", results)
+            organic_results = results.get("organic_results", [])
 
-            # organic_results = results.get("organic_results", [])
-            return str(results)
+            print("Fetched results:", len(organic_results))
 
             if not organic_results:
                 break
 
             for result in organic_results:
 
-                link = result.get("link", "")
+                position_counter += 1
 
+                link = result.get("link", "")
                 if not link:
                     continue
 
                 result_domain = normalize_domain(link)
 
-                actual_position = result.get("position")
+                print(f"{position_counter}: {result_domain}")
 
-                print(actual_position, result_domain)
-
-                # Match domain
                 if target_domain in result_domain:
-                    return actual_position
+                    return f"Found at position: {position_counter}"
 
         except Exception as e:
             return f"Error: {e}"
@@ -78,33 +75,30 @@ HTML = """
     <title>Keyword Ranking Checker</title>
 
     <style>
-
-        body{
+        body {
             font-family: Arial;
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
         }
 
-        input{
+        input {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
         }
 
-        button{
+        button {
             padding: 12px 20px;
             cursor: pointer;
         }
 
-        .result{
+        .result {
             margin-top: 20px;
             font-size: 20px;
             font-weight: bold;
         }
-
     </style>
-
 </head>
 
 <body>
@@ -150,7 +144,6 @@ def home():
     ranking = None
 
     if request.method == "POST":
-
         keyword = request.form["keyword"]
         domain = request.form["domain"]
 
