@@ -23,8 +23,6 @@ def find_ranking(keyword, target_domain, max_results=300):
 
     target_domain = target_domain.lower().replace("www.", "")
 
-    position = 1
-
     for start in range(0, max_results, 10):
 
         print(f"Checking {start + 1} to {start + 10}")
@@ -41,6 +39,7 @@ def find_ranking(keyword, target_domain, max_results=300):
 
             search = GoogleSearch(params)
             results = search.get_dict()
+
             print(results)
 
             organic_results = results.get("organic_results", [])
@@ -57,13 +56,13 @@ def find_ranking(keyword, target_domain, max_results=300):
 
                 result_domain = normalize_domain(link)
 
-                print(position, result_domain)
+                actual_position = result.get("position")
 
-                # Better matching
+                print(actual_position, result_domain)
+
+                # Match domain
                 if target_domain in result_domain:
-                    return position
-
-                position += 1
+                    return actual_position
 
         except Exception as e:
             return f"Error: {e}"
