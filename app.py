@@ -1,11 +1,12 @@
 from flask import Flask, request, render_template_string
 from serpapi import GoogleSearch
 from urllib.parse import urlparse
+import os
 
 app = Flask(__name__)
 
 # Your SerpApi Key
-API_KEY = "51d0be0f94fb75c28e3358a0e8160b3cc5538a95e3210d07e938d7a65a50c5a7"
+API_KEY = os.getenv("51d0be0f94fb75c28e3358a0e8160b3cc5538a95e3210d07e938d7a65a50c5a7")
 
 
 def normalize_domain(url):
