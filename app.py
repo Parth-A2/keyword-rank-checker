@@ -42,7 +42,8 @@ def find_ranking(keyword, target_domain, max_results=300):
 
             print("API RESPONSE:", results)
 
-            organic_results = results.get("organic_results", [])
+            # organic_results = results.get("organic_results", [])
+            return str(results)
 
             if not organic_results:
                 break
