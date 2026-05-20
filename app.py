@@ -40,7 +40,7 @@ def find_ranking(keyword, target_domain, max_results=300):
             search = GoogleSearch(params)
             results = search.get_dict()
 
-            print(results)
+            print("API RESPONSE:", results)
 
             organic_results = results.get("organic_results", [])
 
